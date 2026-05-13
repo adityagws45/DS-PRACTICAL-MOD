@@ -1,0 +1,687 @@
+ASSIGNMENT 4
+
+ASSIGNMENT NO. 4 
+Aim: Implement Berkeley algorithm for clock synchronization. 
+Problem Statement: Implement Berkeley Algorithm to synchronize clocks of different 
+systems in a distributed environment.
+
+
+
+//ad
+
+client.py
+server.py
+
+
+cd ~/Desktop/Practical4
+
+python3 server.py
+
+
+9. Full Command Summary
+Terminal 1 (Server)
+cd ~/Desktop/Practical4
+python3 server.py
+
+Terminal 2
+cd ~/Desktop/Practical4
+python3 client.py
+
+Terminal 3
+cd ~/Desktop/Practical4
+python3 client.py
+
+Terminal 4
+cd ~/Desktop/Practical4
+python3 client.py
+
+
+10. Expected Output
+Server
+Server started...
+Client Data updated with: 127.0.0.1 : 50920
+Client Data updated with: 127.0.0.1 : 50921
+Client Data updated with: 127.0.0.1 : 50922
+
+New synchronization cycle started.
+Number of clients to be synchronized: 3
+Recent time sent successfully
+Client
+Local time before synchronization : 2026-05-10 10:00:31.913701
+Synchronized time at the client is : 2026-05-10 10:00:09.354429
+
+
+//////////////////////////////////////////////////
+
+
+javac Server.java Client.java
+
+10. Full Command Summary
+Terminal 1 (Server)
+cd ~/Desktop/Practical4
+javac Server.java Client.java
+java Server
+
+
+Terminal 2
+cd ~/Desktop/Practical4
+java Client
+
+Terminal 3
+cd ~/Desktop/Practical4
+java Client
+
+Terminal 4
+cd ~/Desktop/Practical4
+java Client
+
+11. Expected Output
+Server
+Server started...
+Client connected
+Client connected
+Client connected
+
+Received client time: 10:00:05
+Received client time: 10:00:09
+Received client time: 10:00:12
+
+Server time: 10:00:07
+Average Time: 10:00:08
+
+Sent adjustment to client 1: 3000 ms
+Sent adjustment to client 2: -1000 ms
+Sent adjustment to client 3: -4000 ms
+Client
+Client local time: 10:00:05
+Adjustment received: 3000 ms
+Adjusted time: 10:00:08
+
+
+
+//////////////////////////////////////////////////////////////////////////
+
+
+Practical 4 Theory: Berkeley Algorithm for Clock Synchronization
+Aim
+
+To implement the Berkeley Algorithm for synchronizing the clocks of different systems in a distributed environment.
+
+1. Introduction to Clock Synchronization
+
+In a distributed system, many computers (called nodes) work together.
+Each computer has its own internal clock.
+
+Because of:
+
+Clock drift
+Hardware differences
+Processing delays
+Network delays
+
+the clocks of different systems may show slightly different times.
+
+Why Synchronization is Important?
+
+Clock synchronization is required for:
+
+Coordinating distributed processes
+Ordering events correctly
+Maintaining consistency in logs
+Distributed databases
+Transaction systems
+2. What is Berkeley Algorithm?
+
+The Berkeley Algorithm is a clock synchronization algorithm proposed by the researchers at the University of California, Berkeley.
+
+It is used when:
+
+There is no external UTC or NTP time server.
+One machine acts as a master (time coordinator).
+Other machines act as slaves (clients).
+
+The master collects the times of all systems, computes an average, and sends the required adjustment to each client.
+
+3. Need for Berkeley Algorithm
+
+Suppose three computers show:
+
+Computer	Time
+Master	10:00:10
+Client 1	10:00:20
+Client 2	09:59:55
+Client 3	10:00:05
+
+All systems are different.
+
+Berkeley Algorithm calculates the average time and synchronizes all systems to that average.
+
+4. Basic Working Principle
+Select one system as the master.
+Master polls all clients for their current time.
+Clients send their local times.
+Master calculates the average time.
+Master computes adjustment values.
+Master sends adjustments to all clients.
+Clients update their clocks.
+5. Berkeley Algorithm Architecture
+          Client 1
+              |
+              v
+Client 2 --> Master <-- Client 3
+              |
+              v
+          Client 4
+
+The master is responsible for synchronization.
+
+6. Step-by-Step Example
+
+Suppose the times are:
+
+Node	Time
+Master	100 sec
+Client 1	102 sec
+Client 2	98 sec
+Client 3	101 sec
+Average Time
+4
+100+102+98+101
+	​
+
+=100.25 sec
+
+4
+100+102+98+101
+	​
+
+=100.25
+
+Adjustments
+Node	Adjustment
+Master	+0.25 sec
+Client 1	−1.75 sec
+Client 2	+2.25 sec
+Client 3	−0.75 sec
+
+After applying these adjustments, all clocks become synchronized.
+
+7. Features of Berkeley Algorithm
+Centralized time coordinator (master).
+Does not require external UTC.
+Uses average time.
+Reduces the effect of faulty clocks.
+Suitable for local distributed systems.
+8. Advantages
+No external time source required.
+Easy to implement.
+Good for LAN-based distributed systems.
+Handles small clock drifts effectively.
+9. Disadvantages
+Single point of failure (if master fails).
+Accuracy depends on network delay.
+Not ideal for very large networks.
+Requires periodic synchronization.
+10. Applications
+Distributed databases
+Cluster computing
+Banking systems
+Log synchronization
+Sensor networks
+11. Comparison with NTP
+Feature	Berkeley Algorithm	Network Time Protocol (NTP)
+External UTC required	No	Yes
+Time source	Master average	Internet time servers
+Suitable for	Internal networks	Internet/global systems
+Complexity	Simple	More complex
+12. Algorithm Steps (Exam Format)
+Choose one node as the master.
+Master requests time from all clients.
+Clients send their current times.
+Master computes the average.
+Master calculates individual adjustments.
+Master sends adjustments to clients.
+Clients update their clocks.
+13. Practical Implementation Overview
+
+In this practical:
+
+Server (Master)
+Waits for 3 clients.
+Receives their times.
+Calculates average time.
+Sends adjustment to each client.
+Client
+Sends its local time.
+Receives adjustment.
+Prints synchronized time.
+14. Expected Output
+Server
+Server started...
+Client Data updated with: 127.0.0.1 : 60983
+Client Data updated with: 127.0.0.1 : 50638
+Client Data updated with: 127.0.0.1 : 55934
+
+New synchronization cycle started.
+Number of clients to be synchronized: 3
+Recent time sent successfully
+Client
+Local time before synchronization : 2026-05-10 00:00:31.913701
+Synchronized time at the client is : 2026-05-10 00:00:09.354429
+15. Conclusion
+
+The Berkeley Algorithm synchronizes clocks in a distributed system by collecting the local times of all machines, computing their average, and sending correction values to each node. It provides consistent system time without depending on an external time server.
+
+
+///////////////////////////////////////////////////////////////////////////////////////////
+
+
+Practical 4 (Java) – Complete Project Flow and Output Explanation
+Project Objective
+
+The goal of this project is to synchronize the clocks of multiple clients using the Berkeley Algorithm.
+
+In this practical:
+
+Server.java acts as the master clock.
+Client.java acts as the slave clocks.
+3 clients connect to the server.
+Each client sends its current time.
+The server calculates the average time.
+The server sends the adjustment required for each client.
+Each client updates its clock.
+1. Overall Project Flow
+Start Server
+    ↓
+Server waits for 3 clients
+    ↓
+Start Client 1, Client 2, Client 3
+    ↓
+Each client generates local time
+    ↓
+Each client sends time to server
+    ↓
+Server receives all times
+    ↓
+Server gets its own current time
+    ↓
+Server calculates average time
+    ↓
+Server computes adjustment for each client
+    ↓
+Server sends adjustment to each client
+    ↓
+Each client updates its time
+    ↓
+All clients show the same synchronized time
+2. Real-Life Analogy
+
+Imagine four friends comparing watches.
+
+Person	Watch Time
+Server	10:00:07
+Client 1	10:00:05
+Client 2	10:00:09
+Client 3	10:00:12
+
+They agree to use the average time: 10:00:08.
+
+Then:
+
+Client 1 adds 3 seconds.
+Client 2 subtracts 1 second.
+Client 3 subtracts 4 seconds.
+
+Now everyone shows 10:00:08.
+
+3. Detailed Project Flow
+Step 1: Start the Server
+
+Command:
+
+java Server
+
+Server creates:
+
+ServerSocket serverSocket = new ServerSocket(5000);
+
+It listens on port 5000.
+
+Output:
+
+Server started...
+Step 2: Start the Clients
+
+Command (run three times):
+
+java Client
+
+Each client connects to:
+
+new Socket("localhost", 5000);
+Step 3: Client Generates a Local Time
+long localTime = System.currentTimeMillis()
+                 + (long)(Math.random() * 10000);
+
+This adds a random delay of 0–10 seconds to simulate different clocks.
+
+Example output:
+
+Client local time: 10:00:05
+Step 4: Client Sends Time to Server
+out.writeLong(localTime);
+Step 5: Server Accepts Three Clients
+for (int i = 0; i < 3; i++) {
+    serverSocket.accept();
+}
+
+Output:
+
+Client connected
+Client connected
+Client connected
+Step 6: Server Receives Times
+long clientTime = in.readLong();
+
+Output:
+
+Received client time: 10:00:05
+Received client time: 10:00:09
+Received client time: 10:00:12
+Step 7: Server Gets Its Own Time
+long serverTime = System.currentTimeMillis();
+
+Output:
+
+Server time: 10:00:07
+Step 8: Server Calculates Average Time
+
+Times:
+
+Client 1 = 10:00:05
+Client 2 = 10:00:09
+Client 3 = 10:00:12
+Server = 10:00:07
+
+Average = 10:00:08
+
+Output:
+
+Average Time: 10:00:08
+Step 9: Server Calculates Adjustment
+
+Formula:
+
+diff = averageTime - clientTime;
+Client	Time	Adjustment
+Client 1	10:00:05	+3000 ms
+Client 2	10:00:09	-1000 ms
+Client 3	10:00:12	-4000 ms
+Step 10: Server Sends Adjustment
+out.writeLong(diff);
+
+Output:
+
+Sent adjustment to client 1: 3000 ms
+Sent adjustment to client 2: -1000 ms
+Sent adjustment to client 3: -4000 ms
+Step 11: Client Receives Adjustment
+long adjustment = in.readLong();
+Step 12: Client Updates Time
+long newTime = localTime + adjustment;
+
+Output:
+
+Adjustment received: 3000 ms
+Adjusted time: 10:00:08
+4. Server Output Explanation
+Server started...
+Client connected
+Client connected
+Client connected
+
+Received client time: 10:00:05
+Received client time: 10:00:09
+Received client time: 10:00:12
+
+Server time: 10:00:07
+Average Time: 10:00:08
+
+Sent adjustment to client 1: 3000 ms
+Sent adjustment to client 2: -1000 ms
+Sent adjustment to client 3: -4000 ms
+Meaning
+Server starts.
+Three clients connect.
+Their times are received.
+Server includes its own time.
+Average time is computed.
+Required corrections are sent.
+5. Client Output Explanation
+Client local time: 10:00:05
+Adjustment received: 3000 ms
+Adjusted time: 10:00:08
+Meaning
+Client initially shows 10:00:05.
+Receives +3000 ms.
+Updates to 10:00:08.
+6. Final Result
+
+After synchronization:
+
+Node	Final Time
+Server	10:00:08
+Client 1	10:00:08
+Client 2	10:00:08
+Client 3	10:00:08
+
+All clocks become identical.
+
+7. Viva Explanation
+
+In this project, the server acts as the master clock and three clients act as slave clocks. Each client sends its current local time to the server. The server includes its own time, calculates the average time, and computes the adjustment required for each client. Each client applies the received adjustment, and all clocks become synchronized.
+
+
+
+
+/////////////////////////////////////////////////////////////////////////////////
+
+
+Practical 4 (Python) – Complete Project Flow and Output Explanation
+Project Objective
+
+The purpose of this project is to implement the Berkeley Clock Synchronization Algorithm using Python sockets.
+
+In this project:
+
+server.py acts as the master clock.
+client.py acts as the slave clocks.
+Three clients connect to the server.
+Each client sends its current local time.
+The server calculates the average time.
+The server sends the adjustment to each client.
+Each client updates its clock.
+1. Overall Project Flow
+Start server.py
+      ↓
+Server waits for 3 clients
+      ↓
+Run client.py three times
+      ↓
+Each client gets current local time
+      ↓
+Each client sends time to server
+      ↓
+Server receives all client times
+      ↓
+Server gets its own current time
+      ↓
+Server calculates average time
+      ↓
+Server computes adjustment for each client
+      ↓
+Server sends adjustment values
+      ↓
+Each client updates local time
+      ↓
+All clients display the same synchronized time
+2. Real-Life Analogy
+
+Imagine a teacher asking three students for the time shown on their watches.
+
+Person	Watch Time
+Teacher (Server)	10:00:07
+Student 1 (Client 1)	10:00:31
+Student 2 (Client 2)	10:00:05
+Student 3 (Client 3)	09:59:27
+
+The teacher calculates the average and tells each student how much to add or subtract so that all watches show the same time.
+
+3. Detailed Project Flow
+Step 1: Start the Server
+
+Command:
+
+python3 server.py
+
+The server creates a socket and listens on port 5000.
+
+server.bind(("127.0.0.1", 5000))
+server.listen(5)
+
+Output:
+
+Server started...
+Step 2: Start Three Clients
+
+Run:
+
+python3 client.py
+
+three times.
+
+Each client connects to the server:
+
+client.connect(("127.0.0.1", 5000))
+Step 3: Client Gets Current Time
+local_time = datetime.now()
+
+Example output:
+
+Local time before synchronization : 2026-05-10 00:00:31.913701
+Step 4: Client Sends Time to Server
+client.send(str(local_time).encode())
+
+The datetime is converted to a string and sent to the server.
+
+Step 5: Server Accepts Three Clients
+
+The server waits for three connections:
+
+for _ in range(3):
+    conn, addr = server.accept()
+
+Output:
+
+Client Data updated with: 127.0.0.1 : 60983
+Client Data updated with: 127.0.0.1 : 50638
+Client Data updated with: 127.0.0.1 : 55934
+
+Each client gets a different temporary port number.
+
+Step 6: Server Receives Client Times
+client_time_str = conn.recv(1024).decode()
+client_time = datetime.strptime(
+    client_time_str,
+    "%Y-%m-%d %H:%M:%S.%f"
+)
+
+The server converts the received string back into a datetime object.
+
+Step 7: Server Gets Its Own Time
+master_time = datetime.now()
+Step 8: Server Calculates Average Time
+
+The server adds:
+
+Its own time
+All three client times
+
+and divides by 4.
+
+Example:
+
+Server = 00:00:10
+Client 1 = 00:00:31
+Client 2 = 00:00:05
+Client 3 = 23:59:27
+
+Average = 00:00:09.354429
+
+Step 9: Server Calculates Adjustment
+diff = avg_datetime - client_time
+
+This gives the number of seconds each client must add or subtract.
+
+Step 10: Server Sends Adjustment
+conn.send(str(diff.total_seconds()).encode())
+Step 11: Client Receives Adjustment
+diff = float(client.recv(1024).decode())
+Step 12: Client Updates Time
+new_time = local_time + timedelta(seconds=diff)
+
+Output:
+
+Synchronized time at the client is : 2026-05-10 00:00:09.354429
+4. Server Output Explanation
+Server started...
+
+Client Data updated with: 127.0.0.1 : 60983
+Client Data updated with: 127.0.0.1 : 50638
+Client Data updated with: 127.0.0.1 : 55934
+
+New synchronization cycle started.
+Number of clients to be synchronized: 3
+Recent time sent successfully
+Meaning
+Server starts.
+Three clients connect.
+Server receives their times.
+Synchronization begins.
+Average time is computed.
+Adjustment values are sent to all clients.
+5. Client Output Explanation
+Client 1
+Local time before synchronization : 2026-05-10 00:00:31.913701
+Synchronized time at the client is : 2026-05-10 00:00:09.354429
+Client 2
+Local time before synchronization : 2026-05-10 00:00:05.792768
+Synchronized time at the client is : 2026-05-10 00:00:09.354429
+Client 3
+Local time before synchronization : 2026-05-09 23:59:27.797544
+Synchronized time at the client is : 2026-05-10 00:00:09.354429
+6. Interpretation
+
+Before synchronization, every client had a different time.
+
+After synchronization, all clients show:
+
+2026-05-10 00:00:09.354429
+
+That common value is the average time computed by the server.
+
+7. Final Result
+Node	Final Time
+Server	00:00:09.354429
+Client 1	00:00:09.354429
+Client 2	00:00:09.354429
+Client 3	00:00:09.354429
+
+All clocks are synchronized.
+
+8. Viva Explanation
+
+In this Python project, the server acts as the master clock and three clients act as slave clocks. Each client sends its current time to the server. The server calculates the average time using its own time and all client times, computes the required adjustment for each client, and sends that adjustment back. Each client applies the adjustment and displays the synchronized time.
+
+
+
