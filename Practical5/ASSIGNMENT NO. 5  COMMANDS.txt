@@ -1,0 +1,540 @@
+ASSIGNMENT NO. 5 
+
+Aim: Implement Token Ring algorithm using a distributed system. 
+
+
+Problem Statement: Implement Token Ring algorithm in a distributed system to ensure 
+mutual exclusion among processes. 
+
+
+Compile Process.java
+Open 3 terminals ->
+java Process 1 5001 5002
+java Process 2 5002 5003
+java Process 3 5003 5001
+
+///////////////////////////////////////////////////
+ad code 
+
+cd ~/Desktop/DS\ practical/Practical5
+javac -version
+java -version
+rm -f TokenRing.class
+javac --release 8 TokenRing.java
+java TokenRing
+
+//////////////////////////////////////////////
+
+javac TokenRing.java
+
+java TokenRing
+
+///////////////////////////////////////////
+
+Same for process
+
+javac Process.java
+
+java Process
+
+///////////////////////////////////////////
+
+
+
+
+Practical 5: Token Ring Algorithm – Complete Theory
+
+This practical is based on the Token Ring Algorithm, a token-based mutual exclusion algorithm used in distributed systems.
+
+1. What Is a Distributed System?
+
+A distributed system is a group of independent computers or processes that communicate over a network and work together as one system.
+
+Examples
+Online banking
+ATM networks
+Cloud services
+Distributed databases
+
+In distributed systems:
+
+There is no shared memory.
+There is no global clock.
+Processes communicate by sending messages.
+2. What Is Mutual Exclusion?
+
+Mutual exclusion means:
+
+Only one process can access a shared resource at a time.
+
+Shared Resources
+Printer
+File
+Database
+Network connection
+Critical Section
+
+The part of a program where the shared resource is accessed.
+
+Why Mutual Exclusion Is Needed
+
+If two processes update the same resource simultaneously:
+
+Data may become inconsistent.
+Results may be incorrect.
+3. Challenges in Distributed Systems
+
+In a single computer, semaphores and mutexes can be used.
+
+In distributed systems:
+
+Processes run on different machines.
+They communicate only through messages.
+
+So specialized distributed algorithms are needed.
+
+4. Token-Based Mutual Exclusion
+
+In token-based algorithms, a special message called a token circulates in the system.
+
+Rules:
+
+Only the process holding the token can enter the critical section.
+After finishing, it passes the token to another process.
+
+Because only one token exists, only one process can access the critical section at any time.
+
+5. Token Ring Algorithm
+
+Processes are arranged in a logical ring.
+
+P1 → P2 → P3 → P4 → P1
+
+The token moves around the ring continuously.
+
+6. Working Principle
+Initially, one process holds the token.
+The token is passed to the next process.
+If a process wants to enter the critical section, it uses the token.
+After completing its work, it passes the token onward.
+If it does not need the critical section, it immediately forwards the token.
+7. Real-Life Analogy
+
+Students sit in a circle with one pen.
+
+Only the student holding the pen can write.
+After writing, the pen is passed to the next student.
+
+Mapping:
+
+Real Life	Token Ring
+Student	Process
+Pen	Token
+Writing	Critical Section
+8. Example
+
+Processes:
+
+P1 → P2 → P3 → P4 → P1
+
+Suppose P3 needs the critical section:
+
+Token moves from P1 to P2 to P3.
+P3 enters the critical section.
+P3 exits and passes the token to P4.
+9. Properties of Token Ring Algorithm
+Safety
+
+Only one token exists, so only one process can enter the critical section.
+
+Fairness
+
+Every process gets the token in order.
+
+Starvation-Free
+
+Each process eventually receives the token.
+
+Deadlock-Free
+
+The token keeps circulating.
+
+10. Advantages
+Simple to understand and implement.
+Guaranteed mutual exclusion.
+Fair access.
+Low message overhead.
+11. Disadvantages
+If the token is lost, the system stops until a new token is created.
+If a process crashes, the ring may break.
+Waiting time increases as the number of processes grows.
+12. Message Complexity
+
+Each critical-section entry requires at most N - 1 token passes, where N is the number of processes.
+
+13. Practical Implementation Overview
+TokenRing.java
+Simulates token passing in a single program.
+Shows how data is sent after the sender gets the token.
+Process.java
+Uses sockets to create real processes.
+Each process communicates with the next one.
+14. Applications
+Distributed databases
+Shared printers
+File servers
+Cloud resource coordination
+15. Conclusion
+
+The Token Ring Algorithm is a token-based distributed mutual exclusion algorithm in which a single token circulates among processes arranged in a logical ring. A process can enter the critical section only when it possesses the token, ensuring mutual exclusion, fairness, and freedom from starvation.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Practical 5: Token Ring Algorithm
+
+You have two versions of the same practical:
+
+Code 1 – TokenRing.java
+A simple simulation of the Token Ring algorithm in a single program.
+Code 2 – Process.java
+A realistic implementation using sockets where multiple Java processes communicate with each other.
+PART 1: Code 1 – TokenRing.java
+What This Program Does
+
+This program simulates token passing and data transmission in a logical ring.
+
+All nodes are represented by numbers (0, 1, 2, ...).
+Token initially starts at node 0.
+Sender receives the token.
+Sender sends data.
+Intermediate nodes forward the data.
+Receiver receives the data.
+Code 1
+import java.util.*;
+
+class TokenRing {
+    public static void main(String args[]) {
+        Scanner scan = new Scanner(System.in);
+
+        System.out.print("Enter the number of nodes: ");
+        int n = scan.nextInt();
+
+        int token = 0;
+
+        // Display ring
+        System.out.println("\nLogical Ring:");
+        for (int i = 0; i < n; i++) {
+            System.out.print(i + " ");
+        }
+        System.out.println("0");
+
+        // Input sender, receiver, and data
+        System.out.print("\nEnter sender: ");
+        int s = scan.nextInt();
+
+        System.out.print("Enter receiver: ");
+        int r = scan.nextInt();
+
+        System.out.print("Enter data: ");
+        int data = scan.nextInt();
+
+        // Token passing
+        System.out.print("\nToken passing: ");
+        int i = token;
+        while (i != s) {
+            System.out.print(i + " -> ");
+            i = (i + 1) % n;
+        }
+        System.out.println(s);
+
+        // Sender sends data
+        System.out.println("Sender " + s + " sending data: " + data);
+
+        // Forwarding data
+        i = (s + 1) % n;
+        while (i != r) {
+            System.out.println("Data " + data + " forwarded by " + i);
+            i = (i + 1) % n;
+        }
+
+        // Receiver receives data
+        System.out.println("Receiver " + r + " received data: " + data);
+
+        scan.close();
+    }
+}
+Step-by-Step Flow of Code 1
+1. Read Number of Nodes
+int n = scan.nextInt();
+
+Suppose input is 6.
+
+Nodes are:
+
+0, 1, 2, 3, 4, 5
+2. Token Starts at Node 0
+int token = 0;
+3. Display Logical Ring
+0 1 2 3 4 5 0
+4. Read Sender, Receiver, Data
+
+Example:
+
+Sender = 1
+Receiver = 5
+Data = 5
+5. Pass Token to Sender
+
+Token movement:
+
+0 -> 1
+6. Sender Sends Data
+Sender 1 sending data: 5
+7. Intermediate Nodes Forward Data
+Data 5 forwarded by 2
+Data 5 forwarded by 3
+Data 5 forwarded by 4
+8. Receiver Gets Data
+Receiver 5 received data: 5
+Output of Code 1
+Enter the number of nodes: 6
+
+Logical Ring:
+0 1 2 3 4 5 0
+
+Enter sender: 1
+Enter receiver: 5
+Enter data: 5
+
+Token passing: 0 -> 1
+Sender 1 sending data: 5
+Data 5 forwarded by 2
+Data 5 forwarded by 3
+Data 5 forwarded by 4
+Receiver 5 received data: 5
+Explanation of Output
+Token passing: 0 -> 1
+
+Token starts at process 0 and moves to sender 1.
+
+Sender 1 sending data: 5
+
+Process 1 now has permission and sends data.
+
+Data 5 forwarded by 2
+
+Process 2 forwards the message.
+
+Data 5 forwarded by 3
+
+Process 3 forwards the message.
+
+Data 5 forwarded by 4
+
+Process 4 forwards the message.
+
+Receiver 5 received data: 5
+
+Process 5 receives the data.
+
+
+
+
+
+/////////////////////////////////////////////////////////////////////////
+
+PART 2: Code 2 – Process.java
+What This Program Does
+
+This version creates multiple real Java processes that communicate using sockets.
+
+Each process:
+
+Opens a server socket.
+Connects to the next process.
+Waits for the token.
+Enters the critical section.
+Passes the token.
+Code 2
+import java.io.*;
+import java.net.*;
+
+public class Process {
+    public static void main(String[] args) throws Exception {
+
+        int id = Integer.parseInt(args[0]);
+        int myPort = Integer.parseInt(args[1]);
+        int nextPort = Integer.parseInt(args[2]);
+
+        ServerSocket serverSocket = new ServerSocket(myPort);
+        System.out.println("Process " + id + " listening on port " + myPort);
+
+        Socket next = null;
+        while (next == null) {
+            try {
+                next = new Socket("localhost", nextPort);
+            } catch (Exception e) {
+                Thread.sleep(1000);
+            }
+        }
+
+        DataOutputStream out = new DataOutputStream(next.getOutputStream());
+
+        Socket prev = serverSocket.accept();
+        DataInputStream in = new DataInputStream(prev.getInputStream());
+
+        if (id == 1) {
+            Thread.sleep(2000);
+            System.out.println("\nProcess 1 STARTS THE TOKEN\n");
+            out.writeUTF("TOKEN");
+        }
+
+        while (true) {
+            String msg = in.readUTF();
+
+            if (msg.equals("TOKEN")) {
+                System.out.println("Process " + id + " RECEIVED TOKEN");
+
+                Thread.sleep(1000);
+                System.out.println("Process " + id + " ENTERING CRITICAL SECTION");
+
+                Thread.sleep(2000);
+                System.out.println("Process " + id + " EXITING CRITICAL SECTION");
+
+                Thread.sleep(2000);
+                System.out.println("Process " + id + " PASSING TOKEN");
+
+                out.writeUTF("TOKEN");
+            }
+        }
+    }
+}
+Running Code 2
+
+Compile once:
+
+javac Process.java
+
+Run in three terminals:
+
+java Process 1 5001 5002
+java Process 2 5002 5003
+java Process 3 5003 5001
+Ring Formed
+1 → 2 → 3 → 1
+Flow of Code 2
+Each process starts and listens on its own port.
+Each process connects to the next process.
+Process 1 creates the token.
+Token moves to Process 2.
+Process 2 enters the critical section and passes the token.
+Process 3 does the same.
+Token returns to Process 1.
+This continues forever.
+Sample Output
+Terminal 1
+Process 1 listening on port 5001
+Process 1 STARTS THE TOKEN
+Process 1 RECEIVED TOKEN
+Process 1 ENTERING CRITICAL SECTION
+Process 1 EXITING CRITICAL SECTION
+Process 1 PASSING TOKEN
+Terminal 2
+Process 2 listening on port 5002
+Process 2 RECEIVED TOKEN
+Process 2 ENTERING CRITICAL SECTION
+Process 2 EXITING CRITICAL SECTION
+Process 2 PASSING TOKEN
+Terminal 3
+Process 3 listening on port 5003
+Process 3 RECEIVED TOKEN
+Process 3 ENTERING CRITICAL SECTION
+Process 3 EXITING CRITICAL SECTION
+Process 3 PASSING TOKEN
+Output Explanation
+Process X listening on port ...
+
+The process is ready to receive messages.
+
+STARTS THE TOKEN
+
+Process 1 creates the initial token.
+
+RECEIVED TOKEN
+
+The process gets permission.
+
+ENTERING CRITICAL SECTION
+
+The process accesses the shared resource.
+
+EXITING CRITICAL SECTION
+
+The work is completed.
+
+PASSING TOKEN
+
+The token is sent to the next process.
+
+Main Difference Between the Two Codes
+Feature	TokenRing.java	Process.java
+Type	Simulation	Real socket communication
+Number of terminals	1	Multiple
+User input	Yes	Command-line arguments
+Runs once	Yes	Runs continuously
+Complexity	Easy	Advanced
+Final Conclusion
+Code 1 (TokenRing.java) is a simple educational simulation.
+Code 2 (Process.java) is a realistic implementation using socket communication.
+Both demonstrate that only the token holder can enter the critical section, ensuring mutual exclusion.
+
+
+
+
+
+
+
+
+
+
