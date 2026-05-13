@@ -1,0 +1,349 @@
+ASSIGNMENT NO. 1 
+Aim: To implement multi-threaded client/server process communication using Java RMI. 
+Problem Statement: 
+To develop a distributed application using Java RMI where a client sends a request to a 
+server and the server processes it and returns the result.
+
+
+CODE  SARTHAK/ME/YOGESH
+
+AddClient.java
+AddServer.java
+AddServerImpl.java
+AddServerIntf.java
+
+cd ~/Practical1
+
+YT
+
+java -version
+javac -version
+javac *.java
+rmiregistry
+
+new terminal ->1
+java Server
+
+new terminal ->2
+java Client 50 10 =>50
+
+//////////////////////////////////////////////
+
+For Java 8 (or Older)
+
+cd ~/Practical1
+javac *.java
+rmic AddServerImpl
+rmiregistry &
+java AddServer
+
+new terminal 
+
+cd ~/Practical1
+java AddClient 127.0.0.1 5 40
+
+
+///////////////////////////////////////////
+
+For Modern Java (Java 15 and Above: 17, 21, 24, etc.)
+
+cd ~/Practical1
+javac *.java
+rmiregistry &
+java AddServer
+
+new terminal
+
+cd ~/Practical1
+java AddClient 127.0.0.1 5 40
+
+
+
++------------------+
+|   Start Program  |
++------------------+
+         |
+         v
++---------------------------+
+| Compile all Java files    |
+| javac *.java              |
++---------------------------+
+         |
+         v
++------------------------------------+
+| Generate Stub (Java 8 only)        |
+| rmic AddServerImpl                 |
++------------------------------------+
+         |
+         v
++---------------------------+
+| Start RMI Registry        |
+| rmiregistry               |
++---------------------------+
+         |
+         v
++---------------------------+
+| Start Server              |
+| java AddServer            |
++---------------------------+
+         |
+         v
++----------------------------------------------+
+| Server creates AddServerImpl object           |
++----------------------------------------------+
+         |
+         v
++----------------------------------------------+
+| Server registers object as "AddServer"       |
+| Naming.rebind("AddServer", obj)              |
++----------------------------------------------+
+         |
+         v
++---------------------------+
+| Start Client              |
+| java AddClient IP a b     |
++---------------------------+
+         |
+         v
++----------------------------------------------+
+| Client looks up "AddServer" in Registry      |
+| Naming.lookup()                              |
++----------------------------------------------+
+         |
+         v
++----------------------------------------------+
+| Registry returns Stub to Client              |
++----------------------------------------------+
+         |
+         v
++----------------------------------------------+
+| Client calls add(a, b) on Stub               |
++----------------------------------------------+
+         |
+         v
++----------------------------------------------+
+| Stub sends request to Server                 |
++----------------------------------------------+
+         |
+         v
++----------------------------------------------+
+| Server executes add(a, b)                    |
++----------------------------------------------+
+         |
+         v
++----------------------------------------------+
+| Result returned to Client                    |
++----------------------------------------------+
+         |
+         v
++---------------------------+
+| Client displays Sum       |
++---------------------------+
+         |
+         v
++---------------------------+
+| End Program               |
++---------------------------+
+
+
+
+Java RMI Practical Flow Diagram Explained in Very Simple Language
+
+Think of this practical as a conversation between three people:
+
+Client → The student who wants the answer.
+RMI Registry → The directory or phone book.
+Server → The teacher who knows how to add numbers.
+Simple Real-Life Example
+
+Suppose you want to know the answer to:
+
+5 + 40 = ?
+
+Instead of solving it yourself, you ask your teacher.
+
+You ask: "Sir, what is 5 + 40?"
+Teacher calculates.
+Teacher replies: "45"
+
+This is exactly what happens in this RMI practical.
+
+Step-by-Step Flow Diagram in Simple Language
+1. Start Program
+Start Program
+
+You begin the practical.
+
+2. Compile All Java Files
+javac *.java
+Simple Meaning
+
+Convert all .java files into .class files so Java can run them.
+
+Real-Life Meaning
+
+You prepare all your files for execution.
+
+3. Generate Stub (Java 8 Only)
+rmic AddServerImpl
+Simple Meaning
+
+Creates a helper file called stub.
+
+What Stub Does
+
+The stub acts as a representative of the server on the client side.
+
+Real-Life Meaning
+
+It's like assigning a messenger to carry your question to the teacher.
+
+If you are using Java 17/21/24, this step is skipped.
+
+4. Start RMI Registry
+rmiregistry
+Simple Meaning
+
+Starts a directory service.
+
+Real-Life Meaning
+
+Like a phone book that stores:
+
+Service Name → AddServer
+Server Address
+Why Needed
+
+The client does not know where the server is.
+
+5. Start Server
+java AddServer
+Simple Meaning
+
+Starts the program that can perform addition.
+
+6. Server Creates Object
+AddServerImpl obj = new AddServerImpl();
+Meaning
+
+The server creates the calculator object.
+
+Real-Life Meaning
+
+The teacher sits ready with a calculator.
+
+7. Server Registers Itself
+Naming.rebind("AddServer", obj);
+Meaning
+
+The server stores its name in the registry.
+
+Real-Life Meaning
+
+Teacher adds his contact information to the phone book.
+
+“If anyone asks for AddServer, connect them to me.”
+
+8. Start Client
+java AddClient 127.0.0.1 5 40
+Meaning
+Part	Meaning
+127.0.0.1	Local machine
+5	First number
+40	Second number
+Real-Life Meaning
+
+You want the teacher to add 5 and 40.
+
+9. Client Looks Up the Server
+Naming.lookup("rmi://127.0.0.1/AddServer");
+Meaning
+
+The client asks the registry:
+
+“Please give me the address of AddServer.”
+
+10. Registry Returns Stub
+Meaning
+
+The registry returns the stub object to the client.
+
+Real-Life Meaning
+
+The phone book gives you the teacher's contact number.
+
+11. Client Calls add(5, 40)
+addServerIntf.add(5, 40);
+Meaning
+
+Client requests addition.
+
+Real-Life Meaning
+
+You ask the teacher:
+
+“Please add 5 and 40.”
+
+12. Stub Sends Request to Server
+Meaning
+
+The stub sends:
+
+Method name: add
+Parameters: 5, 40
+
+to the server.
+
+Real-Life Meaning
+
+Your messenger delivers your question to the teacher.
+
+13. Server Executes the Method
+return d1 + d2;
+Calculation
+5 + 40 = 45
+Real-Life Meaning
+
+Teacher solves the problem.
+
+14. Result Returns to Client
+Meaning
+
+Server sends 45.0 back.
+
+Real-Life Meaning
+
+Teacher gives you the answer.
+
+15. Client Displays Result
+The sum is: 45.0
+Meaning
+
+Client prints the answer.
+
+16. End Program
+
+Program finishes successfully.
+
+Full Story in One Paragraph
+
+First, all Java files are compiled. The RMI Registry is started, which acts like a directory. The server starts, creates the addition object, and registers itself with the name AddServer. The client starts and asks the registry for AddServer. The registry returns a stub. The client calls add(5, 40) on the stub. The stub sends the request to the server. The server calculates the sum and returns 45.0. The client receives the result and prints it.
+
+Very Simple Visual Flow
+Client asks Registry:
+"Where is AddServer?"
+
+Registry replies:
+"Here is the server."
+
+Client asks Server:
+"Add 5 and 40."
+
+Server replies:
+"45.0"
+
+Client prints:
+"The sum is: 45.0"
+
+
+

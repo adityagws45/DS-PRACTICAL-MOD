@@ -1,0 +1,445 @@
+Aim: To develop a distributed application using CORBA to demonstrate object brokering 
+by implementing a calculator. 
+
+ME/SARTHAK- commands
+
+Problem Statement: 
+Develop a distributed application using CORBA where a client invokes methods on a 
+remote server object to perform arithmetic operations such as addition, subtraction, 
+multiplication, and division.
+
+SARTHAK  Commands
+
+Make Calculator.idl file and CaalculatorImpl.java
+In cmd put -> idlj -fall Calculator.idl
+Compile all java files -> javac *.java CalculatorApp/*.java
+Open three cmd -> tnameserv -ORBInitialPort 1050
+                  java Server -ORBInitialPort 1050 -ORBInitialHost localhost
+                  java Client -ORBInitialPort 1050 -ORBInitialHost localhost
+
+
+
+DS practical/
+└── Practical2/
+    │
+    ├── Calculator.idl          ← YOU write this (contract/interface)
+    ├── CalculatorImpl.java     ← YOU write this (actual logic)
+    ├── Server.java             ← YOU write this (registers object)
+    ├── Client.java             ← YOU write this (calls remote methods)
+    │
+    ├── CalculatorImpl.class    ← auto generated after javac
+    ├── Server.class            ← auto generated after javac
+    ├── Client.class            ← auto generated after javac
+    │
+    └── CalculatorApp/          ← AUTO created by idlj command
+        ├── Calculator.java
+        ├── CalculatorHelper.java
+        ├── CalculatorHolder.java
+        ├── CalculatorOperations.java
+        ├── CalculatorPOA.java
+        └── _CalculatorStub.java
+
+
+
+
+
+
+
+11. Complete Command Sequence
+Compile (Run Once)
+
+cd ~/DS_Practicals/Practical2
+idlj -fall Calculator.idl
+javac CalculatorApp/*.java
+javac *.java
+
+Terminal 1
+cd ~/DS_Practicals/Practical2
+tnameserv -ORBInitialPort 1050
+
+
+Terminal 2
+cd ~/DS_Practicals/Practical2
+java Server -ORBInitialPort 1050 -ORBInitialHost localhost
+
+Terminal 3
+cd ~/DS_Practicals/Practical2
+java Client -ORBInitialPort 1050 -ORBInitialHost localhost
+
+
+
+CORBA Calculator Practical – Ubuntu Terminal Commands (Step by Step)
+
+Important: CORBA tools such as idlj and tnameserv are available in Java 8. If you use Java 11 or later, these commands will not work.
+
+1. Open Terminal
+
+Press:
+
+Ctrl + Alt + T
+2. Move to Your Practical Folder
+
+Suppose your practical is stored in:
+
+~/DS_Practicals/Practical2
+
+Run:
+
+cd ~/DS_Practicals/Practical2
+Meaning
+
+cd means change directory.
+
+3. Check Java Version
+java -version
+
+Expected output should show Java 8, for example:
+
+java version "1.8.0_202"
+
+If you see Java 17 or Java 21, CORBA tools are not available.
+
+4. Generate Java Files from IDL
+idlj -fall Calculator.idl
+Meaning
+
+This command reads Calculator.idl and creates the CalculatorApp/ folder containing generated Java files.
+
+After Running
+
+Your folder will look like:
+
+Practical2/
+├── Calculator.idl
+├── CalculatorImpl.java
+├── Server.java
+├── Client.java
+└── CalculatorApp/
+5. Compile Generated Files
+javac CalculatorApp/*.java
+Meaning
+
+Compiles all Java files inside the CalculatorApp folder.
+
+6. Compile Your Java Files
+javac *.java
+Meaning
+
+Compiles:
+
+CalculatorImpl.java
+Server.java
+Client.java
+7. Open Three Terminal Windows/Tabs
+
+You need:
+
+Terminal 1 → Naming Service
+Terminal 2 → Server
+Terminal 3 → Client
+
+In Ubuntu Terminal, open new tabs using:
+
+Ctrl + Shift + T
+8. Terminal 1 – Start Naming Service
+cd ~/DS_Practicals/Practical2
+tnameserv -ORBInitialPort 1050
+Expected Output
+Initial Naming Context:
+TransientNameServer: setting port for initial object references to: 1050
+Ready.
+Meaning
+
+Naming service started and is waiting for registrations and lookups.
+
+9. Terminal 2 – Start Server
+cd ~/DS_Practicals/Practical2
+java Server -ORBInitialPort 1050 -ORBInitialHost localhost
+Expected Output
+Server is ready and waiting...
+Meaning
+
+Server created the Calculator object and registered it as "Calculator".
+
+10. Terminal 3 – Run Client
+cd ~/DS_Practicals/Practical2
+java Client -ORBInitialPort 1050 -ORBInitialHost localhost
+Expected Output
+Enter first number: 10
+Enter second number: 5
+Addition       = 15.0
+Subtraction    = 5.0
+Multiplication = 50.0
+Division       = 2.0
+
+
+/////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+Theory of CORBA Calculator Practical
+
+Before writing code, it is important to understand the theory behind this practical.
+
+1. What is CORBA?
+
+CORBA (Common Object Request Broker Architecture) is a technology that allows a program running on one machine to call methods of an object running on another machine.
+
+In simple words:
+
+CORBA enables communication between distributed applications as if they were local.
+
+2. What is a Distributed System?
+
+A distributed system consists of multiple computers or processes working together.
+
+Example
+Client program runs on one computer.
+Server program runs on another computer.
+Client requests a service.
+Server processes the request and returns the result.
+
+In this practical:
+
+Client sends two numbers.
+Server performs calculation.
+Result is sent back to client.
+3. Real-Life Analogy
+
+Think of ordering food in a restaurant.
+
+Component	Real-Life Equivalent
+Client	Customer
+Server	Chef
+Naming Service	Waiter
+IDL	Menu Card
+ORB	Communication System
+Flow
+Customer orders food.
+Waiter finds the chef.
+Chef prepares food.
+Waiter delivers food.
+
+Similarly:
+
+Client requests operation.
+Naming service locates server.
+Server executes operation.
+Result is returned.
+4. Why CORBA is Needed?
+
+Without CORBA, client and server communication becomes difficult.
+
+CORBA provides:
+
+Language independence
+Platform independence
+Object location transparency
+Automatic communication handling
+5. What is ORB?
+
+ORB (Object Request Broker) is the heart of CORBA.
+
+It acts as a messenger between client and server.
+
+Responsibilities of ORB
+Sends client requests to server.
+Receives responses from server.
+Hides networking details.
+Simple Definition
+
+ORB is middleware that manages communication between distributed objects.
+
+6. What is IDL?
+
+IDL (Interface Definition Language) defines the methods that the server will provide.
+
+It is a contract between client and server.
+
+In This Practical
+interface Calculator {
+    double add(in double a, in double b);
+    double subtract(in double a, in double b);
+    double multiply(in double a, in double b);
+    double divide(in double a, in double b);
+};
+Meaning
+
+The calculator provides four operations.
+
+7. Why IDL is Used?
+
+Both client and server use the same interface definition.
+
+This ensures they agree on:
+
+Method names
+Parameters
+Return types
+8. What is idlj?
+
+idlj is the Java IDL compiler.
+
+It converts the IDL file into Java files.
+
+Command
+idlj -fall Calculator.idl
+Generated Files
+Calculator.java
+CalculatorPOA.java
+CalculatorHelper.java
+CalculatorHolder.java
+CalculatorOperations.java
+_CalculatorStub.java
+9. Stub and Skeleton
+Stub
+
+Client-side proxy.
+
+The client calls methods on the stub as if it were the real object.
+
+Skeleton
+
+Server-side dispatcher.
+
+Receives requests and calls actual methods.
+
+10. What is POA?
+
+POA (Portable Object Adapter) connects server objects to the ORB.
+
+It activates objects and handles incoming requests.
+
+11. What is Naming Service?
+
+Naming service stores object references using names.
+
+Example
+
+Server registers object as:
+
+"Calculator"
+
+Client looks it up using:
+
+resolve_str("Calculator")
+Simple Definition
+
+Naming service works like a phone directory.
+
+12. What is tnameserv?
+
+tnameserv starts the CORBA naming service.
+
+Command
+tnameserv -ORBInitialPort 1050
+
+Port 1050 is used for communication.
+
+13. Server Theory
+
+The server performs these steps:
+
+Initialize ORB.
+Activate POA.
+Create CalculatorImpl.
+Convert servant to object reference.
+Register object in naming service.
+Wait for client requests.
+14. Client Theory
+
+The client performs these steps:
+
+Initialize ORB.
+Connect to naming service.
+Look up "Calculator".
+Get remote object reference.
+Call methods.
+Display results.
+15. Complete Working Flow
+Client enters 10 and 5
+        ↓
+Client calls add(10, 5)
+        ↓
+Stub packages request
+        ↓
+ORB sends request
+        ↓
+Server skeleton receives request
+        ↓
+CalculatorImpl.add() executes
+        ↓
+Result 15 returned
+        ↓
+Client displays 15
+
+//////////////////////////////////////////////////////
+User enters numbers
+       ↓
+Client sends request
+       ↓
+ORB forwards request
+       ↓
+Naming service locates Calculator
+       ↓
+Server receives request
+       ↓
+CalculatorImpl performs calculation
+       ↓
+Result sent back
+       ↓
+Client displays result
+
+///////////////////////////////////////////////////////////
+
+┌──────────────────────┐
+│ Calculator.idl       │
+└─────────┬────────────┘
+          │
+          ▼
+┌──────────────────────┐
+│ idlj -fall          │
+└─────────┬────────────┘
+          ▼
+┌──────────────────────┐
+│ CalculatorApp/*      │
+└─────────┬────────────┘
+          ▼
+┌──────────────────────┐
+│ CalculatorImpl.java  │
+└─────────┬────────────┘
+          ▼
+┌──────────────────────┐
+│ Server.java          │
+└─────────┬────────────┘
+          ▼
+┌──────────────────────┐
+│ Client.java          │
+└─────────┬────────────┘
+          ▼
+┌──────────────────────┐
+│ Compile All Files    │
+└─────────┬────────────┘
+          ▼
+┌──────────────────────┐
+│ Start tnameserv      │
+└─────────┬────────────┘
+          ▼
+┌──────────────────────┐
+│ Start Server         │
+└─────────┬────────────┘
+          ▼
+┌──────────────────────┐
+│ Run Client           │
+└─────────┬────────────┘
+          ▼
+┌──────────────────────┐
+│ Remote Calculations  │
+└──────────────────────┘
+
+
+
+
+
+
