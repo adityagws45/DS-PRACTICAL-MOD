@@ -1,0 +1,193 @@
+Service Servlet Client
+
+
+File ->New Project ->Java Web -> WebApplication
+
+Project Name: Assignement-7
+
+Project Location:Net beans
+
+->next->Glass FIsh server->next->next
+
+
+tools->option ->fonts and Color
+
+
+Assignmnet 7 ->on assignment 7 -> right click  new ->Web Service 
+
+web Service Name ; MyCalculatorWebService
+
+package :com.myservice
+
+create webservice from scratch ->finish
+
+
+Right Click MyCalculatorWebService ->Add operation
+
+Name:addition
+Return Type:double
+
+click on parameters Add
+
+num1  double 
+num2  double  click ok
+
+u can also go on design operation and click on Add operation 
+
+Name:Subtraction
+Return Type:double
+
+
+num1 double 
+num2 double 
+
+
+
+Same for Multiplication
+
+
+
+Same for Division
+
+
+//////////////////////////////////////////////
+
+In MyCalculatorWebService.java
+
+
+change return 0.0 to num1 + num2
+
+num1-num2
+
+///////////////////////
+
+Right Click Assignment7  ->Build 
+Right CLikc deploy
+
+/////////////////////////////
+right click MyCalculatorWebService.java  ->Test webservice 
+
+
+
+
+//////////////////////////////////////////////////
+
+
+File New project  java web  Web Application 
+
+
+Project Name :CalculatorWebServiceClient ->click next
+
+index.html
+
+
+
+
+
+GO to windows ->ide tools ->Pallete
+
+drag form in body 
+
+Action ->Calculator Servlet
+GET
+
+index.html
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>TODO supply a title</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+</head>
+<body>
+    <form action="CalculatorServlet">
+        Enter Number-1:
+        <input type="text" name="number1" value="" />
+        <br>
+
+        Enter Number-2:
+        <input type="text" name="number2" value="" />
+        <br><br>
+
+        <input type="submit" value="Submit" />
+    </form>
+</body>
+</html>
+
+
+
+
+
+///////////////////////////////////////////
+
+
+CalculatorWebServiceClient-->new -->webservice Client ->click browse Assingmnet 7 MyCalculatorWebserivce
+
+
+Select packge Default-.click finish
+
+/////////////////////////////////////
+
+CalculatoWebSerivceClient-->new-->Servlet--->Class Name:CalculatoServlet-->next
+
+Add Information Checkbox tick
+
+
+CalculatoServlet.java done
+
+
+
+drag  addition
+drag  division
+drag  multiplication
+drag  subtraction 
+
+
+
+protected void processRequest(HttpServletRequest request, HttpServletResponse response)
+        throws ServletException, IOException {
+    
+    response.setContentType("text/html;charset=UTF-8");
+    
+    try (PrintWriter out = response.getWriter()) {
+
+        double num1, num2;
+
+        num1 = Double.parseDouble(request.getParameter("number1"));
+        num2 = Double.parseDouble(request.getParameter("number2"));
+
+        out.println("<!DOCTYPE html>");
+        out.println("<html>");
+        out.println("<head>");
+        out.println("<title>Calculator Servlet Output</title>");
+        out.println("</head>");
+        out.println("<body>");
+
+        out.println("<h1>Addition is : " + addition(num1, num2) + "</h1>");
+        out.println("<h1>Subtraction is : " + subtraction(num1, num2) + "</h1>");
+        out.println("<h1>Multiplication is : " + multiplication(num1, num2) + "</h1>");
+        out.println("<h1>Division is : " + division(num1, num2) + "</h1>");
+
+        out.println("</body>");
+        out.println("</html>");
+    }
+}
+
+
+
+////////////////////////////////////////
+
+CalculatorWebServiceClient right click  clean and build 
+
+
+
+
+
+
+
+
+
+
+
