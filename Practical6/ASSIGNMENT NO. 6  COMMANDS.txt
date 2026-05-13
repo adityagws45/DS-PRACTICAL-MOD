@@ -1,0 +1,550 @@
+ASSIGNMENT NO. 6 
+
+Aim: Implement Bully and Ring algorithms for leader election in a distributed system. 
+
+Problem Statement: Implement Bully Algorithm and Ring Algorithm to elect a 
+coordinator (leader) among processes in a distributed system. 
+
+
+
+
+
+javac Bully.java
+java Bully
+
+
+
+C:\Users\DELL\Desktop\DS practical>cd Practical6
+
+C:\Users\DELL\Desktop\DS practical\Practical6>javac Bully.java
+
+C:\Users\DELL\Desktop\DS practical\Practical6>java Bully
+Processes up = p1 p2 p3 p4 p5
+Process 5 is coordinator
+
+1. Up a process
+2. Down a process
+3. Send a message
+4. Exit
+Enter your choice: 1
+Bring up which process: 3
+Process 3 is already up
+Process 5 is coordinator
+
+1. Up a process
+2. Down a process
+3. Send a message
+4. Exit
+Enter your choice: 2
+Bring down which process: 5
+Process 5 is now down
+
+1. Up a process
+2. Down a process
+3. Send a message
+4. Exit
+Enter your choice: 3
+Which process will send message: 4
+Process 4 election
+Election sent from process 4 to process 5
+Coordinator message sent from process 4 to all
+
+1. Up a process
+2. Down a process
+3. Send a message
+4. Exit
+Enter your choice: 1
+Bring up which process: 4
+Process 4 is already up
+Process 4 is coordinator
+
+1. Up a process
+2. Down a process
+3. Send a message
+4. Exit
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+Bully Algorithm Practical – Complete Flow and Output Explanation
+
+This practical simulates how a distributed system elects a new coordinator when the current coordinator fails.
+
+1. Objective of the Program
+
+The program simulates 5 processes:
+
+P1, P2, P3, P4, P5
+
+Each process can be:
+
+Up (active) → running
+Down (inactive) → failed
+
+The process with the highest active process ID becomes the coordinator.
+
+2. Data Structures Used
+state[]
+static boolean[] state = new boolean[5];
+
+Stores whether each process is active.
+
+Index	Process	Meaning
+0	P1	true if active
+1	P2	true if active
+2	P3	true if active
+3	P4	true if active
+4	P5	true if active
+coordinator
+static int coordinator;
+
+Stores the process number of the current coordinator.
+
+3. Initial Setup (main())
+
+At program start:
+
+for (int i = 0; i < 5; i++) {
+    state[i] = true;
+}
+coordinator = 5;
+
+So:
+
+P1 = up
+P2 = up
+P3 = up
+P4 = up
+P5 = up
+Coordinator = P5
+4. Menu Options
+1. Up a process
+2. Down a process
+3. Send a message
+4. Exit
+5. Method Flow
+up(int up)
+
+Activates a process.
+
+If already active → prints "already up".
+If it was down → activates it and runs election.
+Highest active process becomes coordinator.
+down(int down)
+
+Deactivates a process.
+
+If already down → prints "already down".
+Otherwise marks it inactive.
+message(int mess)
+
+Simulates a process sending a message.
+
+If sender is down → prints "Process X is down".
+If sender is the coordinator → prints "OK".
+Otherwise starts an election.
+6. Overall Program Flow
+Start Program
+     ↓
+Initialize P1 to P5 as active
+     ↓
+Coordinator = P5
+     ↓
+Display menu
+     ↓
+User selects option
+     ↓
+Call up(), down(), message(), or exit
+     ↓
+Return to menu
+7. Your Program Execution
+Step 1: Compile and Run
+javac Bully.java
+java Bully
+Step 2: Initial Output
+Processes up = p1 p2 p3 p4 p5
+Process 5 is coordinator
+Meaning
+
+All five processes are active, and the highest process ID (5) is coordinator.
+
+Step 3: Menu
+1. Up a process
+2. Down a process
+3. Send a message
+4. Exit
+8. Output Explanation – Your Inputs
+Input 1: Bring Up Process 3
+Input
+1
+3
+Output
+Process 3 is already up
+Process 5 is coordinator
+Explanation
+Process 3 is already active.
+No state change occurs.
+Coordinator remains Process 5.
+Input 2: Bring Down Process 5
+Input
+2
+5
+Output
+Process 5 is now down
+Explanation
+Current coordinator fails.
+Active processes become:
+P1 P2 P3 P4
+Coordinator variable still contains 5 until a new election is triggered.
+Input 3: Process 4 Sends a Message
+Input
+3
+4
+Output
+Process 4 election
+Election sent from process 4 to process 5
+Coordinator message sent from process 4 to all
+Detailed Explanation
+1. Process 4 detects coordinator failure.
+2. It starts election.
+3. According to Bully Algorithm, Process 4 sends election messages to higher processes only.
+
+Higher than 4:
+
+P5
+4. Process 5 is down.
+
+No higher active process exists.
+
+5. Process 4 becomes coordinator.
+6. Process 4 broadcasts coordinator message to all processes.
+9. Final State After Election
+Process	State
+P1	Up
+P2	Up
+P3	Up
+P4	Up (Coordinator)
+P5	Down
+10. Visualization
+Initial:
+P1 P2 P3 P4 P5 (Coordinator)
+
+After P5 Down:
+P1 P2 P3 P4
+
+P4 starts election:
+P4 → P5 (down)
+
+No higher active process exists.
+
+P4 becomes coordinator.
+11. Why Process 4 Became Coordinator
+
+Because:
+
+Process 5 was down.
+Process 4 initiated the election.
+There was no higher active process.
+Therefore, Process 4 became the highest active process.
+12. What Happens Next?
+
+The program displays the menu again:
+
+Enter your choice:
+
+You can now:
+
+Bring up Process 5 again.
+Bring down another process.
+Start another election.
+Exit.
+13. If You Bring Up Process 5 Again
+
+Choose:
+
+1
+5
+
+Output:
+
+Process 5 held election
+Process 5 is coordinator
+
+Because Process 5 has the highest ID, it immediately regains leadership.
+
+14. Viva Explanation
+
+Initially all five processes are active and Process 5 is coordinator. When I tried to bring up Process 3, the program reported that it was already active. Then I brought down Process 5, causing the coordinator to fail. After that, Process 4 sent a message, detected the failure, and initiated an election. Since Process 5 was down and there were no higher active processes, Process 4 became the new coordinator and announced this to all processes.
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+javac Ring.java
+java Ring
+
+
+C:\Users\DELL\Desktop\DS practical\Practical6>java Ring
+Enter the number of processes: 3
+Enter the id of process: 2
+Enter the id of process: 5
+Enter the id of process: 8
+
+1. Election
+2. Quit
+Enter your choice: 1
+
+Enter the Process number who initiated election: 5
+Process 5 sends message to 8
+Process 8 sends message to 2
+Process 2 sends message to 5
+Process 8 is selected as coordinator
+
+1. Election
+2. Quit
+Enter your choice: 2
+
+
+Ring Algorithm Practical – Complete Flow and Output Explanation
+
+This practical simulates the Ring Leader Election Algorithm used in distributed systems.
+
+1. Objective of the Program
+
+The goal is to elect a coordinator (leader) among multiple processes.
+
+Rule:
+
+The process with the highest process ID becomes the coordinator.
+
+2. Basic Idea of Ring Algorithm
+
+All processes are arranged in a logical ring.
+
+Each process knows only the next process in the ring.
+
+Election steps:
+
+One process starts the election.
+The election message circulates around the ring.
+Every process adds or compares its ID.
+After one full round, the highest ID is selected.
+That process becomes the coordinator.
+3. Example Ring
+
+If the process IDs are:
+
+2, 5, 8
+
+The ring is:
+
+2 → 5 → 8 → 2
+4. Program Structure
+class Process
+class Process {
+    int id;
+    String state;
+}
+
+Each process stores:
+
+id → process ID
+state → "active"
+Process[] proc
+Process[] proc = new Process[n];
+
+Stores all processes.
+
+5. Complete Program Flow
+Start Program
+     ↓
+Read number of processes
+     ↓
+Read process IDs
+     ↓
+Mark all processes active
+     ↓
+Sort IDs in ascending order
+     ↓
+Display menu
+     ↓
+User selects Election or Quit
+     ↓
+If Election:
+    Read initiator
+    Find initiator position
+    Pass message around ring
+    Determine highest ID
+    Announce coordinator
+     ↓
+Return to menu
+6. Your Program Execution
+Step 1: Compile and Run
+javac Ring.java
+java Ring
+Step 2: Enter Number of Processes
+Enter the number of processes: 3
+
+You created a distributed system with 3 processes.
+
+Step 3: Enter Process IDs
+Enter the id of process: 2
+Enter the id of process: 5
+Enter the id of process: 8
+
+Processes:
+
+P2, P5, P8
+
+All are marked active.
+
+Step 4: Sorting
+
+The program sorts the IDs using Bubble Sort.
+
+Sorted result:
+
+2, 5, 8
+Step 5: Menu
+1. Election
+2. Quit
+7. Output Explanation
+Input: Start Election
+Enter your choice: 1
+Input: Initiator
+Enter the Process number who initiated election: 5
+
+Process 5 starts the election.
+
+Step 1: Find Initiator Position
+
+The array contains:
+
+Index	Process ID
+0	2
+1	5
+2	8
+
+Process 5 is at index 1.
+
+So:
+
+pos = 1
+current = 1
+maxId = 5
+8. Election Message Passing
+
+The do-while loop sends the election message around the ring.
+
+Iteration 1
+
+Current = Process 5
+
+Next process:
+
+(1 + 1) % 3 = 2
+
+Next = Process 8
+
+Output:
+
+Process 5 sends message to 8
+
+Update:
+
+maxId = max(5, 8) = 8
+Iteration 2
+
+Current = Process 8
+
+Next:
+
+(2 + 1) % 3 = 0
+
+Next = Process 2
+
+Output:
+
+Process 8 sends message to 2
+
+Update:
+
+maxId = max(8, 2) = 8
+Iteration 3
+
+Current = Process 2
+
+Next:
+
+(0 + 1) % 3 = 1
+
+Next = Process 5
+
+Output:
+
+Process 2 sends message to 5
+
+The message returns to the initiator, so the loop ends.
+
+9. Coordinator Selection
+
+Output:
+
+Process 8 is selected as coordinator
+Why?
+
+Among all process IDs:
+
+2, 5, 8
+
+the highest is 8.
+
+Therefore, Process 8 becomes the coordinator.
+
+10. Quit Program
+
+Input:
+
+2
+
+Output:
+
+Program terminated...
+11. Final Output Summary
+Process IDs	Initiator	Message Path	Coordinator
+2, 5, 8	5	5 → 8 → 2 → 5	8
+12. Visual Representation
+Logical Ring:
+
+      ┌───────┐
+      ↓       │
+      2 ← 8 ← 5
+      │       ↑
+      └───────┘
+
+Election initiated by 5:
+5 → 8 → 2 → 5
+
+Highest ID = 8
+Coordinator = 8
+13. Viva Explanation
+
+In this practical, I entered three processes with IDs 2, 5, and 8. These processes were arranged in a logical ring. Process 5 initiated the election. The election message traveled from Process 5 to Process 8, then to Process 2, and finally back to Process 5. During this traversal, the program tracked the highest process ID, which was 8. Therefore, Process 8 was elected as the coordinator.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

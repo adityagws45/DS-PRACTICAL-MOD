@@ -1,0 +1,346 @@
+ASSIGNMENT 6
+
+
+
+
+BullyProcess.java – Output Explanation
+
+BullyProcess.java is a socket-based implementation of the Bully Algorithm.
+
+Each terminal window represents one independent process. The process with the highest active ID becomes the leader.
+
+1. Example Commands Used
+
+Open five terminals and run:
+
+Terminal 1
+java BullyProcess 0
+Terminal 2
+java BullyProcess 1
+Terminal 3
+java BullyProcess 2
+Terminal 4
+java BullyProcess 3
+Terminal 5
+java BullyProcess 4
+2. Process IDs and Ports
+Process ID	Port
+0	5001
+1	5002
+2	5003
+3	5004
+4	5005
+3. Expected Output
+Terminal 1 (Process 0)
+Process 0 started on port 5001
+Process 0 starts election
+Process 0 received OK
+Process 0 accepts leader: 4
+Terminal 2 (Process 1)
+Process 1 started on port 5002
+Process 1 received ELECTION
+Process 1 starts election
+Process 1 received OK
+Process 1 accepts leader: 4
+Terminal 3 (Process 2)
+Process 2 started on port 5003
+Process 2 received ELECTION
+Process 2 starts election
+Process 2 received OK
+Process 2 accepts leader: 4
+Terminal 4 (Process 3)
+Process 3 started on port 5004
+Process 3 received ELECTION
+Process 3 starts election
+Process 3 received OK
+Process 3 accepts leader: 4
+Terminal 5 (Process 4)
+Process 4 started on port 5005
+Process 4 received ELECTION
+Process 4 starts election
+Process 4 becomes LEADER
+4. Line-by-Line Explanation
+Process X started on port 500Y
+
+The process creates a ServerSocket and begins listening on its assigned port.
+
+Example:
+
+Process 2 started on port 5003
+Process X starts election
+
+The process begins the Bully Algorithm.
+
+It sends ELECTION messages to all higher-ID processes.
+
+Process X received ELECTION
+
+A lower-ID process contacted this process.
+
+This process:
+
+Sends back OK
+Starts its own election
+Process X received OK
+
+A higher-ID process is alive.
+
+So this process knows it cannot become leader.
+
+Process X becomes LEADER
+
+No higher-ID process responded.
+
+Therefore, this process is the highest active process.
+
+Process X accepts leader: 4
+
+The process receives:
+
+COORDINATOR:4
+
+and updates its leader information.
+
+5. Detailed Election Flow
+
+Suppose Process 0 starts the election.
+
+Step 1: Process 0 Sends ELECTION
+
+To:
+
+Process 1
+Process 2
+Process 3
+Process 4
+Step 2: Higher Processes Reply
+
+Each higher process replies OK.
+
+Step 3: Higher Processes Start Their Own Elections
+
+Eventually Process 4 starts election.
+
+Step 4: Process 4 Has No Higher Process
+
+So it receives no OK.
+
+Step 5: Process 4 Becomes Leader
+Process 4 becomes LEADER
+Step 6: Leader Announcement
+
+Process 4 sends:
+
+COORDINATOR:4
+
+to all other processes.
+
+6. Message Flow Diagram
+Process 0 starts election
+      ↓
+ELECTION → 1,2,3,4
+      ↓
+All higher processes send OK
+      ↓
+Each starts own election
+      ↓
+Process 4 gets no OK
+      ↓
+Process 4 becomes LEADER
+      ↓
+COORDINATOR:4 → all
+      ↓
+All processes accept leader 4
+7. Why Process 4 Wins
+
+Because Process 4 is the highest process ID.
+
+No process has a higher ID than 4.
+
+Therefore, no one can challenge it.
+
+8. Final Result
+Process ID	Status
+0	Accepts leader 4
+1	Accepts leader 4
+2	Accepts leader 4
+3	Accepts leader 4
+4	Leader
+9. Viva Explanation
+
+Each process runs in a separate terminal and listens on a unique port. When an election starts, a process sends ELECTION messages to all higher-ID processes. If any higher process responds with OK, the current process waits. The highest active process receives no OK, becomes the leader, and broadcasts a COORDINATOR message to all other processes.
+
+10. One-Line Summary
+
+In BullyProcess.java, all processes start elections, and the highest active process (Process 4) becomes the leader and informs all others.
+
+
+
+
+
+
+///////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+
+
+
+
+RingProcess.java – Output Explanation
+
+RingProcess.java is a socket-based implementation of the Ring Election Algorithm.
+Each terminal represents one process in a logical ring.
+
+In your execution, you started:
+
+Process 1
+Process 2
+Process 3
+
+The ring formed was:
+
+1 → 2 → 3 → 1
+1. Commands Used
+Terminal 1
+java RingProcess 1 5001 5002
+Terminal 2
+java RingProcess 2 5002 5003
+Terminal 3
+java RingProcess 3 5003 5001
+2. Your Output
+Terminal 1 (Process 1)
+Process 1 starts election
+Process 1 received ELECTION [1, 2, 3]
+Process 1 elected Leader: 3
+Terminal 2 (Process 2)
+Process 2 received ELECTION [1, 2]
+Process 2 knows Leader is: 3
+Terminal 3 (Process 3)
+Process 3 received ELECTION [1, 2, 3]
+Process 3 knows Leader is: 3
+3. Step-by-Step Output Explanation
+Terminal 1 – Process 1
+Process 1 starts election
+
+Process 1 is the initiator because the code contains:
+
+if (id == 1)
+
+So Process 1 sends:
+
+ELECTION:1
+
+to Process 2.
+
+Process 1 received ELECTION [1, 2, 3]
+
+The election message completed one full round and returned to Process 1.
+
+The message now contains all participating process IDs:
+
+[1, 2, 3]
+Process 1 elected Leader: 3
+
+Process 1 computes the maximum ID:
+
+max(1, 2, 3) = 3
+
+Therefore, Process 3 is selected as leader.
+
+Terminal 2 – Process 2
+Process 2 received ELECTION [1, 2]
+
+Process 2 received ELECTION:1, added its own ID, and forwarded:
+
+ELECTION:1,2
+
+to Process 3.
+
+Process 2 knows Leader is: 3
+
+Later, Process 2 received:
+
+LEADER:3
+
+So it recognizes Process 3 as the coordinator.
+
+Terminal 3 – Process 3
+Process 3 received ELECTION [1, 2, 3]
+
+Process 3 received ELECTION:1,2, added its own ID, and forwarded:
+
+ELECTION:1,2,3
+
+to Process 1.
+
+Process 3 knows Leader is: 3
+
+Process 3 receives the leader announcement and confirms that it is the leader.
+
+4. Election Message Flow
+Process 1 starts election
+
+1 → 2 → 3 → 1
+
+Collected IDs:
+[1]
+[1,2]
+[1,2,3]
+
+Highest ID = 3
+5. Leader Announcement Flow
+LEADER:3
+
+1 → 2 → 3 → 1
+
+All processes learn that Process 3 is the coordinator.
+
+6. Why Process 3 Became Leader
+
+The Ring Algorithm selects the process with the highest ID.
+
+Among:
+
+1, 2, 3
+
+the highest is:
+
+3
+
+So Process 3 becomes the leader.
+
+7. Final Result
+Process	Role
+Process 1	Initiator
+Process 2	Participant
+Process 3	Leader
+8. Viva Explanation
+
+Process 1 initiated the election by sending an election message containing its ID. Process 2 added its ID and forwarded the message to Process 3. Process 3 added its ID and forwarded the message back to Process 1. After receiving the list [1, 2, 3], Process 1 selected the highest ID, which was 3, as the leader. A leader announcement was then circulated, and all processes recognized Process 3 as the coordinator.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

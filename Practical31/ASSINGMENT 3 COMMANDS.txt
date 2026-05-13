@@ -1,0 +1,173 @@
+ASSINGMENT 3 
+
+ASSIGNMENT NO. 3 
+Aim:  
+To develop a distributed system to find the sum of N elements in an array by distributing 
+N/n elements to n processors using MPI/OpenMP and display intermediate sums. 
+Problem Statement:  
+Develop a distributed application to compute the sum of N elements of an array by 
+dividing the data among multiple processors. Each processor computes a partial sum, and 
+the final result is obtained by combining all partial sums. Also display intermediate 
+results.
+
+
+/////////////////////////////////////////////
+
+
+Compile -> gcc -fopenmp sum.c
+Run as -> ./a.out
+optional -> set OMP_NUM_THREADS=5     //any number other than 4
+            ./a.out
+
+
+
+
+
+
+
+cd ~/Desktop/DS\ practical/Practical31
+gcc -fopenmp sum.c -o sum
+export OMP_NUM_THREADS=4
+./sum
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/////////////////////////////////////////////////////////////////////////////////
+
+Practical Flow: Parallel Sum Using OpenMP
+Aim
+To compute the sum of an array in parallel using OpenMP and demonstrate how multiple threads work together.
+
+1. Write the Program
+Create a file named sum.c and write the code.
+The program:
+
+
+Stores 8 numbers in an array.
+
+
+Creates multiple threads.
+
+
+Divides the array among the threads.
+
+
+Each thread computes a partial sum.
+
+
+All partial sums are added to get the final total.
+
+
+
+2. Compile the Program
+Ubuntu
+gcc -fopenmp sum.c -o sum
+Windows (CMD or VS Code terminal)
+gcc -fopenmp sum.c -o sum
+This creates an executable file:
+
+
+Ubuntu: sum
+
+
+Windows: sum.exe
+
+
+
+3. Set Number of Threads
+export OMP_NUM_THREADS=4      # Ubuntu
+set OMP_NUM_THREADS=4         # Windows
+This tells OpenMP to create 4 threads.
+
+4. Run the Program
+Ubuntu
+./sum
+Windows
+sum
+
+5. Program Execution Flow
+Step 1: Initialize Data
+Array = {1,2,3,4,5,6,7,8}n = 8total_sum = 0
+
+Step 2: Create Threads
+Because OMP_NUM_THREADS=4, OpenMP creates:
+
+
+Thread 0
+
+
+Thread 1
+
+
+Thread 2
+
+
+Thread 3
+
+
+
+Step 3: Divide the Work
+Each thread gets:
+chunk = n / num_threads = 8 / 4 = 2
+So each thread processes 2 elements.
+
+Step 4: Thread Assignments
+ThreadIndicesElementsPartial Sum00–11, 2312–33, 4724–55, 61136–77, 815
+
+Step 5: Print Partial Sums
+Each thread prints its own result.
+
+Step 6: Update Shared Variable
+Inside:
+#pragma omp critical
+each thread safely adds its partial sum to total_sum.
+
+Step 7: Print Final Result
+Final Total Sum = 36
+
+Output Explanation
+Your output:
+Thread 0 calculated partial sum = 3Thread 2 calculated partial sum = 11Thread 1 calculated partial sum = 7Thread 3 calculated partial sum = 15Final Total Sum = 36
+
+Why Thread 2 Printed Before Thread 1
+Threads run concurrently, and the operating system schedules them independently. The print order is not guaranteed.
+Any order is valid.
+
+Meaning of Each Line
+Thread 0
+Processed 1, 2
+1 + 2 = 3
+Thread 2
+Processed 5, 6
+5 + 6 = 11
+Thread 1
+Processed 3, 4
+3 + 4 = 7
+Thread 3
+Processed 7, 8
+7 + 8 = 15
+Final Sum
+3 + 7 + 11 + 15 = 36
+
+Visual Flow Diagram
+Start  ↓Initialize array and total_sum  ↓Create 4 threads  ↓Divide array into chunks  ↓Each thread calculates local_sum  ↓Each thread prints partial sum  ↓Critical section updates total_sum  ↓All threads finish  ↓Print Final Total Sum = 36  ↓End
+
+Important OpenMP Concepts
+ConceptPurpose#pragma omp parallelCreates multiple threadsomp_get_thread_num()Returns thread IDomp_get_num_threads()Returns number of threads#pragma omp criticalProtects shared variable updatesOMP_NUM_THREADSSets thread count
+
+Viva Explanation
+“This practical demonstrates parallel array summation using OpenMP. The array is divided equally among four threads. Each thread computes a partial sum and prints it. The partial sums are added to a shared variable inside a critical section to avoid race conditions. The final total sum printed is 36.”

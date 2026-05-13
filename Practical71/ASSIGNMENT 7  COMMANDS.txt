@@ -1,0 +1,248 @@
+ASSIGNMENT 7
+
+
+ASSIGNMENT NO.7 
+Aim: Distributed application to consume the web service 
+Problem Statement: To create a simple web service and write any distributed application 
+to consume the web service. 
+
+
+1)Compile
+  javac Server.java
+  javac Client.java
+
+2) Run server 
+  java Server
+
+3) New terminal Run Client
+  java Client
+
+
+also check on browser -> http://localhost:8000/add?a=20&b=30
+
+
+
+Practical 7: Simple Web Service Using Java HTTP Server
+
+This practical demonstrates how to create a simple web service in Java using the built-in HttpServer class and how a client communicates with that service using HttpURLConnection.
+
+1. Objective
+
+To develop a simple web service that:
+
+Accepts two numbers a and b
+Adds them
+Returns the result to the client
+2. Real-Life Analogy
+
+Think of this practical like ordering food.
+
+Client
+
+The customer who places an order.
+
+Server
+
+The restaurant that prepares the order.
+
+URL
+
+The order slip containing details.
+
+Response
+
+The prepared food returned to the customer.
+
+3. Project Files
+Practical71/
+├── Server.java
+├── Client.java
+├── Server.class
+├── Server$MyHandler.class
+└── Client.class
+4. Complete Project Flow
+Start Server
+     ↓
+Server listens on port 8000
+     ↓
+Run Client
+     ↓
+Client sends request:
+http://localhost:8000/add?a=10&b=5
+     ↓
+Server receives request
+     ↓
+Extracts a = 10 and b = 5
+     ↓
+Calculates 10 + 5 = 15
+     ↓
+Creates response "Sum = 15"
+     ↓
+Sends response to client
+     ↓
+Client reads response
+     ↓
+Displays "Response from server: Sum = 15"
+5. Server Code Flow
+Step 1: Create HTTP Server
+HttpServer server = HttpServer.create(new InetSocketAddress(8000), 0);
+Creates a server.
+Runs on port 8000.
+Step 2: Register Endpoint
+server.createContext("/add", new MyHandler());
+Associates the /add URL path with the MyHandler class.
+Step 3: Set Executor
+server.setExecutor(null);
+Uses the default thread pool.
+Step 4: Start Server
+server.start();
+Starts listening for requests.
+6. Client Code Flow
+Step 1: Create URL
+URL url = new URL("http://localhost:8000/add?a=10&b=5");
+
+The client wants to compute:
+
+10 + 5
+Step 2: Open Connection
+HttpURLConnection con =
+        (HttpURLConnection) url.openConnection();
+Step 3: Set GET Method
+con.setRequestMethod("GET");
+Step 4: Read Response
+BufferedReader in =
+    new BufferedReader(
+        new InputStreamReader(con.getInputStream()));
+Step 5: Print Response
+System.out.println("Response from server: " + inputLine);
+7. Detailed Request Processing
+
+The URL is:
+
+http://localhost:8000/add?a=10&b=5
+Components
+Part	Meaning
+http://	Protocol
+localhost	Same computer
+8000	Port number
+/add	Endpoint
+a=10&b=5	Query parameters
+8. Inside handle() Method
+Receive Query
+String query = t.getRequestURI().getQuery();
+
+Returns:
+
+a=10&b=5
+Split Parameters
+String[] params = query.split("&");
+
+Results:
+
+params[0] = "a=10"
+params[1] = "b=5"
+Extract Numbers
+int a = Integer.parseInt(params[0].split("=")[1]);
+int b = Integer.parseInt(params[1].split("=")[1]);
+
+Values:
+
+a = 10
+b = 5
+Perform Addition
+int result = a + b;
+
+Result:
+
+15
+Create Response
+String response = "Sum = " + result;
+
+Response:
+
+Sum = 15
+Send Response
+t.sendResponseHeaders(200, response.length());
+OutputStream os = t.getResponseBody();
+os.write(response.getBytes());
+os.close();
+9. Output Explanation
+Compilation Output
+javac Server.java Client.java
+Note: Client.java uses or overrides a deprecated API.
+Note: Recompile with -Xlint:deprecation for details.
+Meaning
+The code compiled successfully.
+Some older Java APIs are being used.
+This is only a warning, not an error.
+Server Output
+java Server
+Server started at http://localhost:8000
+Meaning
+Server is running.
+Waiting for requests on port 8000.
+Client Output
+java Client
+Response from server: Sum = 15
+Meaning
+Client sent a=10 and b=5.
+Server calculated 15.
+Client displayed the result.
+10. Browser Test
+
+Open:
+
+http://localhost:8000/add?a=20&b=30
+
+Output:
+
+Sum = 50
+Why?
+
+Because:
+
+20 + 30 = 50
+11. What Happens Internally
+Client Sends
+GET /add?a=10&b=5 HTTP/1.1
+Host: localhost:8000
+Server Responds
+HTTP/1.1 200 OK
+
+Sum = 15
+12. Terminal Output Walkthrough
+Terminal 1
+C:\Users\DELL\Desktop\DS practical\Practical71>javac Server.java Client.java
+Note: Client.java uses or overrides a deprecated API.
+Note: Recompile with -Xlint:deprecation for details.
+Both files compiled.
+C:\Users\DELL\Desktop\DS practical\Practical71>java Server
+Server started at http://localhost:8000
+Server started successfully.
+Terminal 2
+C:\Users\DELL\Desktop\DS practical\Practical71>java Client
+Response from server: Sum = 15
+Client communicated with server and printed the result.
+13. Short Explanation for Viva
+
+The server starts on port 8000 and exposes the /add endpoint. The client sends two numbers using URL query parameters. The server extracts those values, performs addition, and returns the result. The client reads the response and displays it.
+
+14. Important Classes Used
+Class	Purpose
+HttpServer	Creates HTTP server
+HttpHandler	Handles requests
+HttpExchange	Represents request and response
+URL	Stores URL
+HttpURLConnection	Sends HTTP request
+BufferedReader	Reads response
+OutputStream	Sends response
+15. Expected Final Output
+Server Terminal
+Server started at http://localhost:8000
+Client Terminal
+Response from server: Sum = 15
+Browser
+Sum = 50
+16. One-Line Summary
+
+This practical implements a simple Java web service where the client sends two numbers to the server through an HTTP GET request, and the server returns their sum.
